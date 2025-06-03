@@ -24,6 +24,16 @@ A full-stack chatbot application that lets you upload PDF files and ask question
 - **Text Splitting**: LangChain `RecursiveCharacterTextSplitter`
 - **PDF Parsing**: `pdf-parse`
 
+  ## 📡 API Endpoints
+
+| Method   | Endpoint             | Description                                                               |
+|----------|----------------------|---------------------------------------------------------------------------|
+| `POST`   | `/api/files/upload`  | Upload up to 5 files (PDF, DOCX, TXT). Files are parsed and embedded.     |
+| `POST`   | `/api/chat/ask`      | Ask a question. Can be general or based on uploaded files.                |
+| `DELETE` | `/api/files/delete`  | Delete a file from memory by filename.                                    |
+| `GET`    | `/api/files/debug`   | Get a list of currently stored filenames in memory (for development use). |
+
+
 ## Start Ollama with Required Models
 Install Ollama if you haven't:
 👉 https://ollama.com/download
