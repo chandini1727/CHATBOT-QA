@@ -196,8 +196,4 @@ OLLAMA_API_URL=[http://localhost:11434](http://localhost:11434)
 
 ## 16. Video Demonstration
 
-<video width="100%" height="400" controls>
-  <source src="https://drive.google.com/uc?export=preview&id=1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ" type="video/mp4" />
-  Your browser does not support embedded videos.
-</video>
-```
+<iframe width="100%" height="400" src="https://drive.google.com/file/d/1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ/preview" allow="autoplay; encrypted-media" allowFullScreen ></iframe> ```
