@@ -1,4 +1,3 @@
-````mdx
 <h1 align="center">🧠 PDF Chatbot with LangChain, Ollama, and React</h1>
 
 <p align="center">
@@ -266,4 +265,3 @@ Defines and initializes:
 <p align="center">
   <b>🧠 Intelligent PDF Chatbot | Local Processing | Privacy First</b>
 </p>
-```
