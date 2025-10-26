@@ -39,48 +39,6 @@ flowchart TD
         N --> O
     end
 ```
-## End-to-End User
-```mermaid
-sequenceDiagram
-    participant U as User
-    participant F as Frontend
-    participant B as Backend
-    participant V as Vector Store
-    participant O as Ollama
-
-    Note over U,B: Phase 1: Upload Multiple Files
-    U->>F: Upload Multiple Files (PDF/DOCX/TXT)
-    F->>B: POST /api/files/upload
-    B->>B: Process all files in parallel
-    B->>V: Store vectors with filename keys
-    B->>F: Return success with filenames
-    F->>U: Show uploaded files list
-    
-    Note over U,B: Phase 2: Select File & Ask Question
-    U->>F: Select specific file from list
-    U->>F: Type question about selected file
-    F->>B: POST /api/chat/ask {question, selectedFiles: ['filename.pdf']}
-    
-    B->>B: Check if selected files exist
-    B->>V: Search ONLY in selected file's vector store
-    V->>B: Return relevant chunks from selected file
-    
-    B->>B: Analyze if context is sufficient
-    B->>B: {Context Found in Selected File?}
-    
-    alt Context Found in Selected File
-        B->>B: Construct prompt with file context
-        B->>O: Send to LLaMA3 with file context
-        O->>B: Generate answer based on file
-    else No Context in Selected File
-        B->>B: Construct general knowledge prompt
-        B->>O: Send to LLaMA3 with general knowledge
-        O->>B: Generate general knowledge answer
-    end
-    
-    B->>F: Return appropriate answer
-    F->>U: Display answer with context source
-```
 ## File Upload Workflow
 ```mermaid
 flowchart TD
