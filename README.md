@@ -39,7 +39,7 @@ flowchart TD
         N --> O
     end
 ```
-## File Upload Workflow
+## Architecture Design
 ```mermaid
 flowchart TD
     Start[User Uploads Multiple Files] --> Validate[Validate Files]
@@ -72,36 +72,6 @@ flowchart TD
     
     J --> Complete[All Files Ready for Selection]
 ```
-## File Selection & Question Workflow
-```mermaid
-flowchart TD
-    Start[User Action] --> Select[User Selects File from List]
-    Select --> Input[User Types Question]
-    Input --> Send[Send to Backend with Selected File]
-    
-    Send --> Validate{Selected File Exists?}
-    Validate -->|No| Error[Return File Not Found]
-    Validate -->|Yes| Search[Search in Selected File Only]
-    
-    Search --> GetVectors[Get Vector Store for Selected File]
-    GetVectors --> Similarity[Similarity Search 15 chunks]
-    Similarity --> ContextCheck{Found Relevant Context?}
-    
-    ContextCheck -->|Yes| FileContext[Use File Context]
-    ContextCheck -->|No| General[Use General Knowledge]
-    
-    FileContext --> ConstructFile[Construct File-Based Prompt]
-    General --> ConstructGeneral[Construct General Prompt]
-    
-    ConstructFile --> LLM[Call LLaMA3]
-    ConstructGeneral --> LLM
-    
-    LLM --> Response[Format Response]
-    Response --> Return[Return Answer with Source Info]
-    
-    Error --> ReturnError[Return Error Message]
-```
-
 ## 🧱 Tech Stack
 
 - **Frontend**: React, Axios, CSS
