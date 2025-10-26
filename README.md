@@ -1,4 +1,3 @@
-```mdx
 # PDF Chatbot with LangChain, Ollama, and React
 
 A full-stack chatbot application that allows users to upload PDF, DOCX, or TXT files and ask intelligent questions about their content. It integrates **LangChain**, **Ollama**, **Express.js**, and **React** to provide a seamless document-based conversational experience.
