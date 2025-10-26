@@ -1,4 +1,3 @@
-````mdx
 <h1 align="center">📄 PDF Chatbot with LangChain, Ollama, and React</h1>
 
 <p align="center">
