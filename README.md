@@ -67,15 +67,15 @@ Install Ollama if you haven't:
                        ` `
 ## Backend Setup
 
-    ` ``bash
+    ```bash
           cd backend
           npm install
           node app.js 
-      ```
+   ```
 ## Frontend Setup
-    ` ``bash
+```bash
          cd frontend
         npm install
         npm start
-   ```
+```
 Frontend runs on: http://localhost:3000
