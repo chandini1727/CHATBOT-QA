@@ -23,19 +23,20 @@
 Working with lengthy PDF documents often makes it difficult to extract specific insights or details quickly. Manually searching for information can be time-consuming and inefficient.  
 
 **Problem Statement:**  
-> Users struggle to interact with and query large document contents efficiently.
+Users struggle to interact with and query large document contents efficiently.
 
 **Goal:**  
-> Build a chatbot that allows users to upload PDFs, ask questions about their content, and receive instant, context-aware answers powered by local AI models.
+Build a chatbot that allows users to upload PDFs, ask questions about their content, and receive instant, context-aware answers powered by local AI models.
 
 ---
 
 ## Architecture Design
+
 ```mermaid
 flowchart TD
     %% Frontend Section
     subgraph Frontend [Frontend - React Application]
-        A[User Interface] --> B["File Upload<br/>PDF / DOCX / TXT"]
+        A[User Interface] --> B[File Upload<br/>PDF / DOCX / TXT]
         B --> C[Question Input & Chat Display]
     end
 
@@ -72,7 +73,6 @@ flowchart TD
     class A,B,C frontend
     class D,E,F,G,H,I,J backend
     class K,L ai
-
 
 **Figure:** System Architecture Flow for PDF Chatbot
 This diagram shows how the React frontend communicates with the Express backend and the local Ollama AI engine for intelligent PDF question answering.
