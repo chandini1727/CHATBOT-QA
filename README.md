@@ -1,199 +1,269 @@
-# PDF Chatbot with LangChain, Ollama, and React
+````mdx
+<h1 align="center">🧠 PDF Chatbot with LangChain, Ollama, and React</h1>
 
-A full-stack chatbot application that allows users to upload PDF, DOCX, or TXT files and ask intelligent questions about their content. It integrates **LangChain**, **Ollama**, **Express.js**, and **React** to provide a seamless document-based conversational experience.
+<p align="center">
+  <i>Upload PDFs, DOCX, or TXT files and interact intelligently with their content.</i><br/>
+  Ask questions about documents or general topics using a locally hosted <b>LLAMA3</b> model.
+</p>
 
----
+<hr/>
 
-## 1. Understanding the Problem
+## Understanding the Problem
 
-Extracting specific information from long documents is often tedious and time-consuming. Traditional chatbots cannot interpret or respond based on user-provided files. This project addresses that gap by enabling users to upload their own files and chat directly with the content — providing contextual, AI-powered answers without external storage or cloud dependency.
+Reading and searching through large documents manually is time-consuming and inefficient.  
+Users need a system that allows them to upload multiple files and ask questions about their content, receiving accurate and contextual answers quickly.
 
----
+**Problem Statement:**  
+> Users find it difficult to extract specific insights or information from large text-based documents.
 
-## 2. Architecture Design
-
-The system follows a **modular client-server architecture**:
-
-- **Frontend (React)** – Handles file uploads, user input, and response visualization.  
-- **Backend (Express.js)** – Manages file parsing, embedding generation, and response orchestration.  
-- **AI Layer (LangChain + Ollama)** – Embeds textual data and generates contextually accurate responses using a local LLaMA3 model.
-
-**Architecture Flow:**
-1. User uploads PDF/DOCX/TXT files.  
-2. Backend extracts and splits text into manageable chunks.  
-3. LangChain converts text into embeddings and stores them in memory.  
-4. User asks a question.  
-5. Similarity search retrieves relevant text chunks.  
-6. Ollama’s LLaMA3 model generates a context-aware response.
+**Goal:**  
+> Build a chatbot that allows users to upload files (PDF, DOCX, TXT), extract their content, embed it for context understanding, and provide intelligent responses using local AI models.
 
 ---
 
-## 3. Functional Requirements
+## Architecture Design
+```mermaid
+flowchart TD
+    subgraph Frontend [Frontend - React Application]
+        A[User Interface] --> B[File Uploads & Chat Interface]
+        B --> C[Display Uploaded Files & Chat Responses]
+    end
 
-| Requirement | Description |
-|--------------|-------------|
-| File Upload | Upload up to 5 files (PDF, DOCX, TXT), each ≤ 20MB. |
-| Text Extraction | Parse and extract textual content from files. |
-| Embedding Generation | Convert text into vector embeddings using LangChain. |
-| Contextual Q&A | Generate intelligent responses using document context or general knowledge. |
-| File Management | Delete uploaded files from in-memory storage. |
-| Theme Toggle | Support light and dark modes in frontend. |
+    subgraph Backend [Backend - Node.js + Express]
+        D[REST API Endpoints] --> E[File Upload Handler - Multer]
+        E --> F[Text Extraction (pdf-parse, mammoth)]
+        F --> G[LangChain Processing (Text Splitter & Embeddings)]
+        G --> H[In-Memory Vector Store]
+        D --> I[Question Handling Service]
+        I --> J[Ollama LLM Interaction]
+    end
+
+    subgraph AI [AI Models - Ollama + LangChain]
+        K[LLaMA3 Model] --> J
+        L[Nomic-Embed-Text Model] --> G
+    end
+
+    subgraph Memory [In-Memory Storage]
+        M[VectorStores for Uploaded Files]
+    end
+
+    A -->|HTTP Requests| D
+    D -->|Embeddings| G
+    G -->|Stores Vectors| M
+    I -->|Search & Context Retrieval| M
+    J -->|Generate Responses| A
+
+    classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef backend fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef ai fill:#fce4ec,stroke:#880e4f,stroke-width:2px
+    classDef memory fill:#e8f5e9,stroke:#1b5e20,stroke-width:2px
+
+    class A,B,C frontend
+    class D,E,F,G,H,I,J backend
+    class K,L ai
+    class M memory
+````
+
+**Figure:** System Architecture Flow for PDF Chatbot
 
 ---
 
-## 4. Non-Functional Requirements
+## Functional Requirements
 
-| Category | Specification |
-|-----------|---------------|
-| Performance | Answers generated within 2–4 seconds. |
-| Scalability | Supports multiple concurrent users (in-memory). |
-| Security | No data stored externally; fully local processing. |
-| Reliability | Handles missing or invalid files gracefully. |
-| Portability | Runs locally with Node.js and Ollama. |
-| Maintainability | Modular and easily extendable code structure. |
+| Feature                      | Description                                                                               |
+| ---------------------------- | ----------------------------------------------------------------------------------------- |
+| **File Upload**              | Upload multiple files (PDF, DOCX, TXT) with size up to 20MB.                              |
+| **Text Extraction**          | Extracts text using `pdf-parse` for PDFs, `mammoth` for DOCX, and UTF-8 decoding for TXT. |
+| **Text Embedding**           | Uses `LangChain` with `nomic-embed-text` model to create embeddings.                      |
+| **Question Answering**       | Users can ask questions related to uploaded documents or general topics.                  |
+| **Short & Detailed Answers** | Automatically detects question length and adjusts answer style.                           |
+| **File Deletion**            | Delete uploaded files from memory.                                                        |
+| **No Data Persistence**      | All files and embeddings are stored in memory only.                                       |
+| **Debug Endpoint**           | Displays stored files for developers.                                                     |
 
 ---
 
-## 5. Environment Variables
+## Non-Functional Requirements
 
-Create a `.env` file in the backend directory:
+| Requirement         | Description                                            |
+| ------------------- | ------------------------------------------------------ |
+| **Performance**     | Provides quick responses using local embeddings.       |
+| **Security**        | No data stored externally; all operations are local.   |
+| **Usability**       | Clean and interactive user interface.                  |
+| **Maintainability** | Modular structure for backend and frontend components. |
+| **Scalability**     | Can handle multiple simultaneous file uploads.         |
+| **Reliability**     | Graceful error handling for file and model operations. |
 
+---
+
+## Setup, APIs, and System Interfaces
+
+### 🧩 Environment Variables (`.env`)
+
+```bash
+PORT=5000
+OLLAMA_API_URL=http://localhost:11434
+FRONTEND_URL=http://localhost:3000
 ```
 
-PORT=5000
-FRONTEND_URL=[http://localhost:3000](http://localhost:3000)
-OLLAMA_API_URL=[http://localhost:11434](http://localhost:11434)
+---
 
-````
+## API Endpoints
+
+| Method   | Endpoint            | Description                                                        |
+| -------- | ------------------- | ------------------------------------------------------------------ |
+| `POST`   | `/api/files/upload` | Upload multiple files (PDF, DOCX, TXT). Extract and embed content. |
+| `POST`   | `/api/chat/ask`     | Ask a question. Uses embeddings or general AI knowledge.           |
+| `DELETE` | `/api/files/delete` | Delete specific uploaded files from memory.                        |
+| `GET`    | `/api/files/debug`  | Get list of all currently stored files.                            |
 
 ---
 
-## 6. API Endpoints
+## 🧠 System Interfaces
 
-| Method | Endpoint | Description |
-|---------|-----------|-------------|
-| `POST` | `/api/files/upload` | Upload and process up to 5 PDF/DOCX/TXT files. |
-| `POST` | `/api/chat/ask` | Ask a question (based on document or general knowledge). |
-| `DELETE` | `/api/files/delete` | Delete a file from memory. |
-| `GET` | `/api/files/debug` | View all stored files (for debugging). |
+### 🖥️ User Interface
 
----
+Built using **React.js**, the user interface allows:
 
-## 7. System Interface
-
-**Backend Interface:**
-```json
-{
-  "question": "What is the summary of the uploaded document?",
-  "files": ["example.pdf"]
-}
-````
-
-**Frontend Interface:**
-
-* Upload files
-* Ask questions
-* Display responses
+* Uploading multiple documents.
+* Viewing uploaded files.
+* Asking questions and viewing AI responses.
+* Switching between light and dark mode.
+* Deleting uploaded files manually.
 
 ---
 
-## 8. User Interface
+### Backend Services
 
-* File upload section (drag-and-drop)
-* Chat input box
-* Response display area
-* File list with delete button
-* Light/Dark mode toggle
+Developed using **Node.js** and **Express.js**, the backend provides APIs for file handling, embedding, and AI responses.
 
----
+**Core Responsibilities:**
 
-## 9. Backend Services
+* Manage file uploads using `Multer`.
+* Extract document content (`pdf-parse`, `mammoth`).
+* Split text into chunks with `RecursiveCharacterTextSplitter`.
+* Generate embeddings and store in memory (`MemoryVectorStore`).
+* Process user questions and generate responses via Ollama (LLaMA3).
 
-| Service            | Responsibility                                          |
-| ------------------ | ------------------------------------------------------- |
-| File Controller    | Handles upload, parsing, embedding, and memory storage. |
-| Chat Controller    | Processes questions and generates responses.            |
-| Vector Store Model | Maintains embeddings in memory.                         |
-| Ollama Service     | Hosts LLaMA3 and nomic-embed-text models locally.       |
+**Libraries Used:**
 
----
-
-## 10. Libraries Used
-
-### Backend
-
-* express
-* cors
-* multer
-* pdf-parse
-* mammoth
-* langchain
-* @langchain/community
-
-### Frontend
-
-* react
-* axios
+* `express` – REST API framework
+* `cors` – Handle cross-origin requests
+* `multer` – File uploads
+* `pdf-parse` – Extract text from PDFs
+* `mammoth` – Extract text from DOCX files
+* `langchain` – Text embedding and retrieval
+* `@langchain/community` – LLM and embedding connectors
 
 ---
 
-## 11. External Interfaces
+### External Interfaces
 
-| Interface  | Description                                                                |
-| ---------- | -------------------------------------------------------------------------- |
-| Ollama API | Local API at `http://localhost:11434` running LLaMA3 and embedding models. |
-| Browser    | Web interface at `http://localhost:3000`.                                  |
-
----
-
-## 12. Workflow Summary
-
-1. **Upload Phase:** Files are uploaded, parsed, split, embedded, and stored in memory.
-2. **Query Phase:** User asks a question → backend performs similarity search → LLaMA3 generates response.
-3. **Cleanup Phase:** User can delete specific files to clear memory.
+| Service            | Purpose                                                         |
+| ------------------ | --------------------------------------------------------------- |
+| **Ollama**         | Local LLM provider hosting `llama3` and `nomic-embed-text`.     |
+| **LangChain**      | Provides text embedding, splitting, and memory-based retrieval. |
+| **React Frontend** | Sends API requests and displays responses interactively.        |
 
 ---
 
-## 13. Tech Stack
+## Workflow Summary
 
-| Layer        | Technology                                    |
-| ------------ | --------------------------------------------- |
-| Frontend     | React, Axios                                  |
-| Backend      | Node.js, Express                              |
-| AI/Embedding | LangChain + Ollama (LLaMA3, nomic-embed-text) |
-| Storage      | In-memory Vector Store                        |
-| Parsing      | pdf-parse, mammoth                            |
-
----
-
-## 14. Key Components in Code
-
-| Component       | File                            | Description                                       |
-| --------------- | ------------------------------- | ------------------------------------------------- |
-| Chat Controller | `controllers/chatController.js` | Handles Q&A using LLaMA3 and embeddings.          |
-| File Controller | `controllers/fileController.js` | Uploads, parses, embeds text.                     |
-| Vector Model    | `models/vectorStore.js`         | Initializes Ollama embeddings and vector stores.  |
-| Chat Routes     | `routes/chatRoutes.js`          | Defines `/api/chat/ask` endpoint.                 |
-| File Routes     | `routes/fileRoutes.js`          | Handles `/api/files/upload`, `/delete`, `/debug`. |
-| Server          | `app.js`                        | Initializes routes, middleware, and CORS.         |
+1. **File Upload** → User uploads files through the React frontend.
+2. **Text Extraction** → Backend extracts text using `pdf-parse` or `mammoth`.
+3. **Text Splitting** → LangChain splits text into small chunks.
+4. **Embedding Generation** → Each text chunk is embedded using `nomic-embed-text`.
+5. **Vector Storage** → Embeddings stored temporarily in `MemoryVectorStore`.
+6. **Question Input** → User asks a question from the frontend.
+7. **Context Search** → Backend searches embeddings for relevant context.
+8. **AI Response** → LLaMA3 model generates a context-based or general answer.
+9. **Response Display** → The frontend displays the AI’s answer.
+10. **File Deletion** → User can delete files from memory manually.
 
 ---
 
-## 15. Developer Notes
+## Tech Stack
 
-* Pull models before running backend:
+| Category            | Technology                      |
+| ------------------- | ------------------------------- |
+| **Frontend**        | React, Axios, CSS               |
+| **Backend**         | Node.js, Express.js             |
+| **AI/LLM**          | Ollama (LLaMA3)                 |
+| **Embeddings**      | LangChain with Nomic Embed Text |
+| **Storage**         | In-Memory Vector Store          |
+| **Text Processing** | pdf-parse, mammoth              |
+| **API Protocol**    | REST (JSON)                     |
+
+---
+
+## Key Code Components
+
+### 1. `app.js`
+
+Initializes the Express server, sets up routes, enables CORS, and runs the backend.
+
+### 2. `fileController.js`
+
+Handles:
+
+* Uploading multiple files.
+* Extracting text.
+* Generating embeddings and storing them in memory.
+* Deleting and debugging stored files.
+
+### 3. `chatController.js`
+
+Handles:
+
+* Question processing.
+* Context retrieval from vector stores.
+* Response generation using LLaMA3 via Ollama.
+
+### 4. `vectorStore.js`
+
+Defines and initializes:
+
+* Ollama embeddings (`nomic-embed-text`)
+* LLM model (`llama3`)
+* In-memory vector store for storing file embeddings.
+
+### 5. `routes`
+
+* `fileRoutes.js` → Handles `/upload`, `/delete`, and `/debug`.
+* `chatRoutes.js` → Handles `/ask` endpoint.
+
+---
+
+## Developer Notes
+
+* Ensure Ollama is installed and running locally before starting the backend.
+* Pull required models:
 
   ```bash
   ollama pull nomic-embed-text
   ollama pull llama3
   ```
-* Backend: `http://localhost:5000`
-* Frontend: `http://localhost:3000`
-* Debug files: `/api/files/debug`
-* No external database or cloud storage used.
+* Run backend:
+
+  ```bash
+  cd backend
+  npm install
+  node app.js
+  ```
+* Run frontend:
+
+  ```bash
+  cd frontend
+  npm install
+  npm start
+  ```
+* Frontend URL: `http://localhost:3000`
+* Backend URL: `http://localhost:5000`
+* All uploaded data and embeddings are stored only in memory and cleared when the server restarts.
 
 ---
 
-## 16. Video Demonstration
-
-<iframe width="100%" height="400" src="https://drive.google.com/file/d/1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ/preview" allow="autoplay; encrypted-media" allowFullScreen ></iframe> ```
+<p align="center">
+  <b>🧠 Intelligent PDF Chatbot | Local Processing | Privacy First</b>
+</p>
+```
