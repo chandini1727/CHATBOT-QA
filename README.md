@@ -1,9 +1,41 @@
 # 📄 PDF Chatbot with LangChain, Ollama, and React
 A full-stack chatbot application that lets you upload PDF files and ask questions about their content. Powered by LangChain, Ollama, Express.js, and React.
+
+## Understanding the Problem
+
+In most traditional document review or information retrieval workflows, users have to manually search through lengthy documents to find relevant information. This process is time-consuming, inefficient, and prone to human error — especially when dealing with large or multiple files.
+
+Users need a fast and intelligent way to:
+- Upload various document types,
+- Automatically extract and understand the content,
+- Ask context-based questions,
+- And receive instant, accurate answers — without relying on external APIs or cloud storage.
+
+---
+
+## Problem Statement
+
+Most document-based AI chatbots either depend on cloud-based LLMs (raising privacy concerns) or fail to process multiple document types efficiently.  
+There is a need for a **privacy-preserving, local, and efficient** document-questioning system that allows users to:
+- Upload multiple documents,
+- Ask questions based on document content or general knowledge,
+- And retrieve answers quickly using local inference.
+
+---
+
+## Goal
+
+To develop a **local, privacy-focused chatbot** that:
+- Embeds and understands document content using LangChain,
+- Utilizes **Ollama**’s **LLaMA3** model for local inference,
+- Provides a seamless and fast question-answering interface,
+- And operates completely offline, ensuring full data privacy.
+
+---
 ## video 
 👉 https://drive.google.com/file/d/1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ/view?usp=drive_link
 
-## 🚀 Features
+## Features
 
 - Upload multiple PDF, DOCX, TXT files (20MB max each)
 - Extracts and embeds content using LangChain
@@ -67,7 +99,7 @@ flowchart TD
         N --> O
     end
 ```
-## 🧱 Tech Stack
+## Tech Stack
 
 - **Frontend**: React, Axios, CSS
 - **Backend**: Node.js, Express, Multer
