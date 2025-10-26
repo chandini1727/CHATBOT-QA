@@ -13,6 +13,34 @@ A full-stack chatbot application that lets you upload PDF files and ask question
 - Delete uploaded files
 - No external storage — all in-memory
 
+| **ID** | **Requirement** | **Description** |
+|--------|------------------|-----------------|
+| 1 | File Upload | Users can upload up to 5 files (PDF, DOCX, or TXT formats). |
+| 2 | File Parsing | Backend extracts text content using `pdf-parse` or relevant parser. |
+| 3 | Embedding Generation | Each uploaded file is embedded using LangChain’s `nomic-embed-text`. |
+| 4 | File-Based Questioning | Users can ask questions specific to a selected file. |
+| 5 | General Questioning | Users can ask general questions answered by the LLM without file context. |
+| 6 | Answer Retrieval | System retrieves top matching embeddings and generates contextual answers. |
+| 7 | File Deletion | Users can delete specific files from in-memory vector store. |
+| 8 | Debug Endpoint | Developers can view stored filenames for debugging via `/api/files/debug`. |
+| 9 | Frontend Interaction | Frontend communicates with backend via REST API. |
+| 10 | Theme Support | Application supports light and dark mode toggles. |
+
+---
+
+## ⚖️ Non-Functional Requirements
+
+| **Category** | **Requirement** | **Description** |
+|---------------|------------------|-----------------|
+| **Performance** | Response Time | System should return an answer within 3 seconds for typical queries. |
+| **Scalability** | File Handling | Supports concurrent uploads and queries efficiently. |
+| **Security** | Data Privacy | All file data and embeddings are stored in memory — no external storage. |
+| **Usability** | UI Simplicity | Simple, intuitive interface for non-technical users. |
+| **Reliability** | Fault Handling | Graceful handling of parsing or embedding errors. |
+| **Maintainability** | Modular Code | Backend separated into controllers, routes, and middleware for easy maintenance. |
+| **Compatibility** | Cross-Platform | Works on major browsers (Chrome, Edge, Firefox). |
+| **Portability** | Local Execution | Can run entirely on a local machine using Ollama. |
+
 ## Architecture Design
 ```mermaid
 flowchart TD
