@@ -9,12 +9,12 @@
 
 ## 🎥 Video Demonstration
 
-<div align="center">
-  <video width="800" controls>
-    <source src="https://drive.google.com/uc?export=download&id=1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ" type="video/mp4" />
-    Your browser does not support the video tag.
-  </video>
-</div>
+<p align="center">
+  <a href="https://drive.google.com/file/d/1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ/view?usp=drive_link" target="_blank">
+    <img src="./assets/video-thumbnail.png" alt="PDF Chatbot Demo" width="700"/>
+  </a><br/>
+  <sub>Click the image to watch the demo video</sub>
+</p>
 
 ---
 
@@ -35,22 +35,22 @@ Working with lengthy PDF documents often makes it difficult to extract specific 
 flowchart TD
     %% Frontend Section
     subgraph Frontend [Frontend - React Application]
-        A[User Interface] --> B[File Upload (PDF, DOCX, TXT)]
-        B --> C[Question Input and Response Display]
+        A[User Interface] --> B["File Upload<br/>PDF / DOCX / TXT"]
+        B --> C[Question Input & Chat Display]
     end
 
     %% Backend Section
     subgraph Backend [Backend - Node.js + Express.js]
         D[API Routes] --> E[File Handling via Multer]
-        E --> F[Content Extraction (PDF-Parse, DOCX Reader)]
-        F --> G[Text Splitting via LangChain]
-        G --> H[Embedding & Storage in MemoryVectorStore]
-        I[Chat Endpoint] --> J[Query Processing via LangChain]
-        J --> K[LLM Interaction with Ollama (LLaMA3)]
+        E --> F[Content Extraction using pdf-parse]
+        F --> G[Text Splitting - LangChain]
+        G --> H[Embeddings - MemoryVectorStore]
+        I[Chat Endpoint] --> J[Query Processor]
+        J --> K[LLM - Ollama (LLaMA3)]
     end
 
     %% Local AI Section
-    subgraph Ollama [Local AI Engine - Ollama]
+    subgraph Ollama [Local AI Engine]
         K --> L[LLaMA3 Model]
         H --> L
         L --> J
@@ -58,11 +58,11 @@ flowchart TD
 
     %% Flow Connections
     A -->|Axios Requests| D
-    D -->|Processed Data| A
+    D -->|Responses| A
     F -->|Extracted Text| G
     G -->|Embeddings| H
-    I -->|User Query| J
-    J -->|Response| A
+    I -->|Query| J
+    J -->|Answer| A
 
     %% Styling
     classDef frontend fill:#e1f5fe,stroke:#01579b,stroke-width:2px
@@ -72,7 +72,7 @@ flowchart TD
     class A,B,C frontend
     class D,E,F,G,H,I,J backend
     class K,L ai
-````
+
 
 **Figure:** System Architecture Flow for PDF Chatbot
 This diagram shows how the React frontend communicates with the Express backend and the local Ollama AI engine for intelligent PDF question answering.
