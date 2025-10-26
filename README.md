@@ -13,7 +13,7 @@ A full-stack chatbot application that lets you upload PDF files and ask question
 - Delete uploaded files
 - No external storage — all in-memory
 
-## Overall System Flow
+## Architecture Design
 ```mermaid
 flowchart TD
     subgraph Phase1[Phase 1: File Upload & Processing]
@@ -38,39 +38,6 @@ flowchart TD
         M --> O[Display to User]
         N --> O
     end
-```
-## Architecture Design
-```mermaid
-flowchart TD
-    Start[User Uploads Multiple Files] --> Validate[Validate Files]
-    Validate --> Accept[Return 202 Accepted]
-    
-    Accept --> Parallel[Process Files in Background]
-    
-    subgraph FileProcessing [Individual File Processing]
-        direction TB
-        A[File Buffer] --> B{Detect Format}
-        B -->|PDF| C[pdf-parse]
-        B -->|DOCX| D[mammoth]
-        B -->|TXT| E[Buffer.toString]
-        C --> F[Extract Text]
-        D --> F
-        E --> F
-        F --> G[Split into 500-char chunks]
-        G --> H[Generate embeddings]
-        H --> I[Create Vector Store]
-        I --> J[Store with filename key]
-    end
-    
-    Parallel --> P1[Process File 1]
-    Parallel --> P2[Process File 2]
-    Parallel --> P3[Process File N]
-    
-    P1 --> FileProcessing
-    P2 --> FileProcessing  
-    P3 --> FileProcessing
-    
-    J --> Complete[All Files Ready for Selection]
 ```
 ## 🧱 Tech Stack
 
