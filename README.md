@@ -1,13 +1,13 @@
 # 📄 PDF Chatbot with LangChain, Ollama, and React
 A full-stack chatbot application that lets you upload PDF files and ask questions about their content. Powered by LangChain, Ollama, Express.js, and React.
-## video 
-   <div align="center">
+## 🎥 Project Demonstration
+
+<div align="center" style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; border: 1px solid #ccc; max-width: 900px; margin: 0 auto;">
   <iframe 
     src="https://drive.google.com/file/d/1FN2SRntK-MUbh0TCwWO3SNhMAmiTs2vZ/preview" 
-    width="800" 
-    height="450" 
+    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; border-radius: 10px;"
     allow="autoplay"
-    style={{ borderRadius: "10px", border: "1px solid #ccc" }}
+    allowfullscreen
   ></iframe>
 </div>
 
